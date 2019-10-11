@@ -43,13 +43,13 @@ accuracy_list = []
 for acc in range(92):
     accuracy_list.append(data[acc][3]) #this allows us to add acc from column 3 onto accuracy_list
 
-acc_avg = np.mean=(accuracy_list)*100   # 91.48%
+acc_avg = np.mean(accuracy_list)*100   # 91.48%
 
 mrt_list = []
 for rt in range(92):
     mrt_list.append(data[rt][4]) #allows us to add rt from column 4 onto mrt_list
     
-mrt_avg = np.median=(mrt_list)   # 477.3ms
+mrt_avg = np.median(mrt_list)   # 477.3ms
 
 
 #%%
@@ -57,14 +57,6 @@ mrt_avg = np.median=(mrt_list)   # 477.3ms
 # if statement. (i.e., loop through the data to make a sum for each condition, 
 # then divide by the number of data points going into the sum)
 #
-
-
-#for stimulus in range(92): 
-#    x = data[stimulus][1]
-#    if x == 1:
-#        words += 1
-#    else:
-#        faces += 1
 
 words = 0
 faces = 0
@@ -99,25 +91,11 @@ faces_acc_avg = (faces_acc_sum / faces)*100
 # wp - white/pleasant, bp - black/pleasant
 # (hint: only one line of code is needed per average)
 #
-import numpy as np
-acc_wp_list = []
-acc_bp_list = []
-mrt_wp_list = []
-mrt_bp_list = []
 
-for stim in range(92):
-    t = data[stim][2]
-if t > 1:
-    acc_wp_list.append(data[stim][3])
-    mrt_wp_list.append(data[stim][4])
-else:
-    acc_bp_list.append(data[stim][3])
-    mrt_bp_list.append(data[stim][3])
-
-acc_wp = np.mean=(acc_wp_list)*100 # 94.0%
-acc_bp = np.mean=(acc_bp_list)*100  # 88.9%
-mrt_wp = np.mean=(mrt_wp_list)  # 469.6ms
-mrt_bp = np.mean=(mrt_bp_list)  # 485.1ms
+acc_wp = np.mean(data[data[:,2]==1][:,3])*100
+acc_bp = np.mean(data[data[:,2]==2][:,3])*100
+mrt_wp = np.mean(data[data[:,2]==1][:,4])
+mrt_bp = np.mean(data[data[:,2]==2][:,4])
 #%% 
 # calculate average median RT for each of the four conditions
 # use for loops, indexing/slicing, or both!
@@ -141,30 +119,46 @@ for rt in range(92):
     elif stim == 2 and pairing ==2:
         faces_bp_median_rt.append(data[rt][4])
 
-wwp_median_rt = np.median=(words_wp_median_rt)
-wbp_median_rt = np.median=(words_bp_median_rt)
-fwp_median_rt = np.median=(faces_wp_median_rt)
-fbp_median_rt = np.median=(faces_bp_median_rt)
 # words - white/pleasant:1,1 478.4ms
+wwp_median_rt = np.mean(words_wp_median_rt)
 # words - black/pleasant:1,2 500.3ms
+wbp_median_rt = np.mean(words_bp_median_rt)
 # faces - white/pleasant:2,1 460.8ms
+fwp_median_rt = np.mean(faces_wp_median_rt)
 # faces - black/pleasant:2,2 469.9ms
-
+fbp_median_rt = np.mean(faces_bp_median_rt)
 
 #%%        
 # compare pairing conditions' effect on RT within stimulus using scipy's 
 # paired-sample t-test: scipy.stats.ttest_rel()
 #
 import scipy.stats
-ttest_words: scipy.stats.ttest_rel(words_wp_median_rt,words_bp_median_rt)
-ttest_faces: scipy.stats.ttest_rel (faces_wp_median_rt,faces_bp_median_rt)
 # words: t=-5.36, p=2.19e-5
+ttest_words = scipy.stats.ttest_rel(words_wp_median_rt,words_bp_median_rt)
 # faces: t=-2.84, p=0.0096
-
+ttest_faces = scipy.stats.ttest_rel (faces_wp_median_rt,faces_bp_median_rt)
 
 #%%
 # print out averages and t-test results
 # (hint: use the ''.format() method to create formatted strings)
-#
+
+#Overall average accuracy and RTs:
 print('\nOVERALL: {:.2f}%, {:.1f} ms'.format(100*acc_avg,mrt_avg))
-...
+
+#Average accuracy and RT split by stimulus:
+print('\nWords: {:.2f}%, {:.1f} ms'.format(words_acc_avg,words_rt_avg))
+print('\nFaces: {:.2f}%, {:.1f} ms'.format(faces_acc_avg,words_acc_avg))
+
+#Average accuracy and RT split by congruency:
+print('\nWhite Pleasant: {:.2f}%, {:.1f} ms'.format(acc_wp,mrt_wp))
+print('\nBlack Pleasant: {:.2f}%, {:.1f} ms'.format(acc_bp,mrt_bp))
+
+#Average median RT for each condition:
+print('\nWords White Pleasant: {:.1f} ms'.format(wwp_median_rt))
+print('\nWords Black Pleasant: {:.1f} ms'.format(wbp_median_rt))
+print('\nFaces White Pleasant: {:.1f} ms'.format(fwp_median_rt))
+print('\nFaces Black Pleasant: {:.1f} ms'.format(fbp_median_rt))
+
+#T-Test Results
+print('\nT-Test Words: %.2f, %.7f '% (ttest_words))
+print('\nT-Test Faces: %.2f, %.7f '% (ttest_faces))
