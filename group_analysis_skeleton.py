@@ -143,11 +143,11 @@ ttest_faces = scipy.stats.ttest_rel (faces_wp_median_rt,faces_bp_median_rt)
 # (hint: use the ''.format() method to create formatted strings)
 
 #Overall average accuracy and RTs:
-print('\nOVERALL: {:.2f}%, {:.1f} ms'.format(100*acc_avg,mrt_avg))
+print('\nOVERALL: {:.2f}%, {:.1f} ms'.format(acc_avg,mrt_avg))
 
 #Average accuracy and RT split by stimulus:
 print('\nWords: {:.2f}%, {:.1f} ms'.format(words_acc_avg,words_rt_avg))
-print('\nFaces: {:.2f}%, {:.1f} ms'.format(faces_acc_avg,words_acc_avg))
+print('\nFaces: {:.2f}%, {:.1f} ms'.format(faces_acc_avg,faces_rt_avg))
 
 #Average accuracy and RT split by congruency:
 print('\nWhite Pleasant: {:.2f}%, {:.1f} ms'.format(acc_wp,mrt_wp))
